@@ -4,8 +4,14 @@ use warnings;
 use ExtUtils::MakeMaker;
 use ExtUtils::CppGuess;
 
+my $brew_prefix = '';
+if ($^O eq 'darwin') {
+    chomp($brew_prefix = `brew --prefix 2>/dev/null` || '');
+}
+my @inc_dirs = ('/usr/include', '/usr/local/include');
+push @inc_dirs, "$brew_prefix/include" if $brew_prefix;
 my $sp_inc;
-for my $dir ('/usr/include', '/usr/local/include', '/opt/homebrew/include') {
+for my $dir (@inc_dirs) {
     if (-f "$dir/sentencepiece_processor.h") {
         $sp_inc = $dir;
         last;
@@ -15,7 +21,7 @@ for my $dir ('/usr/include', '/usr/local/include', '/opt/homebrew/include') {
 if (!$sp_inc) {
     die "libsentencepiece-dev (sentencepiece_processor.h) is required to build PDL::ML::Token::SentencePiece.\n";
 }
-my $lib_flag = $sp_inc =~ m{^/opt/homebrew} ? '-L/opt/homebrew/lib ' : '';
+my $lib_flag = ($brew_prefix && $sp_inc && $sp_inc =~ m{^\$brew_prefix}) ? "-L$brew_prefix/lib " : '';
 
 my $guess    = ExtUtils::CppGuess->new();
 my %cpp_opts = $guess->makemaker_options();
