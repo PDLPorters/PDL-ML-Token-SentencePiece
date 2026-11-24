@@ -64,6 +64,11 @@ C<PDL::ML::Token::SentencePiece> provides C++17/XS bindings to Google's
 C<libsentencepiece> library, encoding text directly into L<PDL> C<long>
 token-ID ndarrays and decoding token ndarrays back to text.
 
+=head1 TYPES
+
+Returns 1-D integer token-ID ndarrays of type C<long> (32-bit signed integer)
+matching SentencePiece's native C<int> vocabulary IDs.
+
 =head1 AUTHOR
 
 C.J. Collier E<lt>cjac@google.comE<gt>
