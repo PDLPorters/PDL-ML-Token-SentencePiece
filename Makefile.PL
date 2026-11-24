@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 use ExtUtils::CppGuess;
 
 my $sp_inc;
-for my $dir ('/usr/include', '/usr/local/include') {
+for my $dir ('/usr/include', '/usr/local/include', '/opt/homebrew/include') {
     if (-f "$dir/sentencepiece_processor.h") {
         $sp_inc = $dir;
         last;
@@ -15,6 +15,7 @@ for my $dir ('/usr/include', '/usr/local/include') {
 if (!$sp_inc) {
     die "libsentencepiece-dev (sentencepiece_processor.h) is required to build PDL::ML::Token::SentencePiece.\n";
 }
+my $lib_flag = $sp_inc =~ m{^/opt/homebrew} ? '-L/opt/homebrew/lib ' : '';
 
 my $guess    = ExtUtils::CppGuess->new();
 my %cpp_opts = $guess->makemaker_options();
@@ -35,7 +36,7 @@ WriteMakefile(
     PREREQ_PM     => { 'PDL' => '2.080', 'Carp' => '0' },
     %cpp_opts,
     INC           => '-I. -I' . $sp_inc,
-    LIBS          => ['-lsentencepiece'],
+    LIBS          => [ $lib_flag . '-lsentencepiece' ],
     XSOPT         => '-C++',
     clean         => { FILES => 'PDL-ML-Token-SentencePiece-* *.o SentencePiece.bs SentencePiece.c' },
     META_MERGE    => {
