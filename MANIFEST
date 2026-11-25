@@ -1,7 +1,10 @@
 Changes
-lib/PDL/ML/Token/SentencePiece.pm
-Makefile.PL
+LICENSE
 MANIFEST
 MANIFEST.SKIP
+Makefile.PL
+README.md
 SentencePiece.xs
+examples/quickstart.pl
+lib/PDL/ML/Token/SentencePiece.pm
 t/01-sentencepiece.t

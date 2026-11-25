@@ -9,3 +9,14 @@
 ^PDL-ML-Token-SentencePiece-.*\.tar\.gz$
 \.bak$
 \.swp$
+^\.git/
+^\.github/
+^\.gitignore$
+^dot-git/
+^_alien/
+\.bs$
+\.xsc$
+^lib/.*\.c$
+\.tar\.gz$
+~$
+^PDL-ML-Token-SentencePiece-

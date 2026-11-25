@@ -64,12 +64,49 @@ C<PDL::ML::Token::SentencePiece> provides C++17/XS bindings to Google's
 C<libsentencepiece> library, encoding text directly into L<PDL> C<long>
 token-ID ndarrays and decoding token ndarrays back to text.
 
+=head1 TUTORIAL
+
+This tutorial shows how to load a trained SentencePiece C<.model> file, inspect
+its vocabulary size, encode text into a 1-D C<long> L<PDL> token-ID ndarray,
+and decode token IDs back into text.
+
+    use strict;
+    use warnings;
+    use PDL;
+    use PDL::ML::Token::SentencePiece;
+
+    # 1. Load a SentencePiece model (e.g. from Llama, Gemma, or T5)
+    my $model_path = $ARGV[0] // 'tokenizer.model';
+    my $sp = PDL::ML::Token::SentencePiece->new(model => $model_path);
+
+    printf "Loaded SentencePiece vocabulary (%d pieces)\n", $sp->piece_size;
+
+    # 2. Encode text into a 1-D PDL long ndarray of token IDs
+    my $text = 'PDL brings fast n-dimensional arrays to Perl.';
+    my $ids  = $sp->encode($text);
+    print "Token IDs ($ids->nelem tokens): $ids\n";
+
+    # 3. Decode the PDL ndarray (or an arrayref of IDs) back to text
+    my $decoded = $sp->decode($ids);
+    print "Decoded: $decoded\n";
+
+See C<examples/quickstart.pl> in the distribution for a runnable version of this
+tutorial.
+
+=head1 TYPES
+
+Returns 1-D integer token-ID ndarrays of type C<long> (32-bit signed integer)
+matching SentencePiece's native C<int> vocabulary IDs.
+
 =head1 AUTHOR
 
 C.J. Collier E<lt>cjac@google.comE<gt>
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright 2026 Google LLC. Apache License, Version 2.0.
+Copyright 2026 Google LLC
+
+This library is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =cut
